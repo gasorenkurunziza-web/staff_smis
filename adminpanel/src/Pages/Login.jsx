@@ -25,8 +25,8 @@ const Login = () => {
       ></div>
       {/*right side*/}
       <div className=" w-full sm: w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-5 sm:p-6 md:p-10 lg:p-16 bg-gradient-to-br from-yellow-50 via white to-yellow-100 flex justify-center items-center">
-        <div className="flex flex-col bg-white rounded-[25px] shadow-7xl flex justify-start items-center w-[460px] md:w-[460px] lg:w-[500px] xl:w-[600] 2xl:w-[700px] h-[600px] md:h-[600px] lg:h-[600px] xl:h-[600px] 2xl:h-[700px]">
-          <h2 className=" mt-5 lg:mt-0 font-bold text-center text-yellow-600 p-5 sm:p-6 md:p-8 lg:p-16  2xl:p-64 text-4xl sm:text-4xl">
+        <div className="flex flex-col bg-white rounded-[25px] shadow-7xl flex justify-start items-center w-[460px] md:w-[460px] lg:w-[500px] xl:w-[600px] 2xl:w-[700px] h-[600px] md:h-[600px] lg:h-[600px] xl:h-[600px] 2xl:h-[700px]">
+          <h2 className=" mt-5 lg:mt-0 font-bold text-center text-yellow-600 p-5 sm:p-6 md:p-8 lg:p-16  2xl:p-14 text-4xl sm:text-4xl xl:text-4xl">
             Admin Panel
           </h2>
           <div className="flex w-4/5 mt-15 md:mt-0 items-center bg-white rounded-[2em] shadow-lg mb-10">
