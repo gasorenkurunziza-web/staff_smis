@@ -7,11 +7,12 @@ import {
   FaUserAlt,
   FaEnvelope,
   FaIdCard,
+  FaTransgender,
 } from "react-icons/fa";
 
 const PersonalInfo = () => {
   return (
-    <div className="rounded-[2em] border border-yellow-400 bg-white p-5 shadow-xl">
+    <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* main div with shadow*/}
       <div className="flex items-center gap-3 mb-5">
         {/*div that will hold personal info title and icon*/}
@@ -35,13 +36,11 @@ const PersonalInfo = () => {
               <FaCamera size={20} className="text-[#d89b17]" />
             </div>
             <p className="text-gray-500 mt-4 font-semibold">Upload Photo</p>
-            <span className="text-gray-400 text-small">
-              jpg,png up to 200MB
-            </span>
+            <span className="text-gray-400 text-small">jpg,png up to 1MB</span>
           </div>
         </div>
         <div className="xl:col-span-3">
-          <div className="grid grid-cols- md:grid-2 xl:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
             {/* inputs*/}
             <div className="flex flex-col p-3">
               <label className="block text-sm mb-2 font-bold text-gray">
@@ -94,17 +93,17 @@ const PersonalInfo = () => {
             {/*gender field*/}
             <div className=" flex flex-col p-3">
               <label className="block text-sm mb-2 font-bold">Gender</label>
-              <div className="flex flex-row items-center shadow-xl p-4 rounded-[1em]">
-                <FaUserAlt size={20} className="text-[#d89b17]" />
+              <div className="flex  flex-row items-center shadow-xl p-4 rounded-[1em]">
+                <FaTransgender size={20} className="text-[#d89b17]" />
                 <select
-                  className="p-[12px] rounded-[1em] text-gray-700 font-medium outline-none"
-                  value={""}
+                  className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
+                  defaultValue=""
                   name="gender"
                   id=""
                 >
                   <option value="">Select Gender</option>
-                  <option value="">Male</option>
-                  <option value="">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
             </div>
@@ -128,7 +127,7 @@ const PersonalInfo = () => {
             {/* Phone Field*/}
             <div className="flex flex-col p-3">
               <label className="block text-sm mb-2 font-bold text-gray">
-                National ID
+                Telephone
               </label>
               <div className="flex items-center bg-white rounded-[1em] shadow-lg mb-2">
                 <FaPhoneAlt
