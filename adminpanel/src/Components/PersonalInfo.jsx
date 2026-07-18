@@ -11,6 +11,13 @@ const PersonalInfo = () => {
         <h1 className="text-[#d89b17] text-xl font-semibold">
           Personal Information
         </h1>
+        {/* content*/}
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {/*for upload photo*/}
+          <div>
+            <h1>Profile Picture</h1>
+          </div>
+        </div>
       </div>
     </div>
   );
