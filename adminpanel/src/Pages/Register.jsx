@@ -11,8 +11,7 @@ import { backend_url } from "../App";
 import { toast } from "sonner";
 
 const Register = () => {
-  console.log(backend_url);
-  const [employee, setEmployee] = useState({
+  const initialEmployee = {
     empstatus: "",
     firstname: "",
     lastname: "",
@@ -34,7 +33,9 @@ const Register = () => {
     nextofkin: "",
     nextofkinphone: "",
     nextofkinrelation: "",
-  });
+  };
+  const [employee, setEmployee] = useState(initialEmployee);
+  const [loading, setLoading] = useState(false);
 
   // Single shared change handler for every text/select input across all
   // the form sections. Every input just needs name={field} onChange={handleChange}.
@@ -46,8 +47,8 @@ const Register = () => {
   };
 
   const save_db = async (e) => {
-    console.log(employee);
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("firstname", employee.firstname);
@@ -80,12 +81,16 @@ const Register = () => {
         formData,
       );
       if (response.data.success) {
-        toast.success("Employee Registered successfully");
-        console.log("Saved Successfully");
+        toast.success("Employee registered successfully");
+        setEmployee(initialEmployee);
       }
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data.message);
+      const message =
+        error.response?.data?.message ||
+        "Something went wrong while saving the employee";
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,11 +106,7 @@ const Register = () => {
       <Educationinfo employee={employee} onChange={handleChange} />
       <Addressinfo employee={employee} onChange={handleChange} />
       <Nextkininfo employee={employee} onChange={handleChange} />
-      <Buttons
-        save_db={save_db}
-        employee={employee}
-        setEmployee={setEmployee}
-      />
+      <Buttons save_db={save_db} loading={loading} />
     </div>
   );
 };
