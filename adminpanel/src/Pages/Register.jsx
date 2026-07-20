@@ -8,6 +8,7 @@ import Nextkininfo from "../Components/Nextkininfo";
 import Buttons from "../Components/Buttons";
 import axios from "axios";
 import { backend_url } from "../App";
+import { toast } from "sonner";
 
 const Register = () => {
   console.log(backend_url);
@@ -68,7 +69,8 @@ const Register = () => {
         backend_url + "/api/employee/register",
         formData,
       );
-      if (response.success) {
+      if (response.data.success) {
+        toast.success("Employee Registered successfully");
         console.log("Saved Successfully");
       }
     } catch (error) {

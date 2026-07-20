@@ -6,7 +6,7 @@ const employeeSchema = new mongoose.Schema({
   empstatus: {
     type: String,
     required: true,
-    enum: ["Active", "Not active"],
+    enum: ["Active", "Not Active"],
   },
   firstname: {
     type: String,
@@ -19,7 +19,6 @@ const employeeSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   gender: {
     type: String,
@@ -28,12 +27,10 @@ const employeeSchema = new mongoose.Schema({
   },
   nid: {
     type: Number,
-    unique: true,
     required: true,
   },
   phone: {
     type: Number,
-    unique: true,
     required: true,
   },
   empldate: {
@@ -98,22 +95,18 @@ const employeeSchema = new mongoose.Schema({
   district: {
     type: String,
     required: true,
-    unique: true,
   },
   sector: {
     type: String,
     required: true,
-    unique: true,
   },
   cell: {
     type: String,
     required: true,
-    unique: true,
   },
   village: {
     type: String,
     required: true,
-    unique: true,
   },
   nextofkin: {
     type: String,
