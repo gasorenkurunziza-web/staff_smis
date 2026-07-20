@@ -12,13 +12,7 @@ import {
 } from "react-icons/fa";
 import { FcDepartment } from "react-icons/fc";
 
-const Jobinfo = ({ employee, setEmployee }) => {
-  const handleEveryChange = (e) => {
-    setEmployee({
-      ...employee,
-      [e.target.name]: e.target.value,
-    });
-  };
+const Jobinfo = ({ employee, onChange }) => {
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* main div with shadow*/}
@@ -51,7 +45,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   placeholder="Enter First Name"
                   className="outline-none py-6 px-3 text-xl"
                   name="empldate"
-                  onChange={handleEveryChange}
+                  onChange={onChange}
                   value={employee.empldate}
                 />
               </div>
@@ -63,7 +57,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                 <select
                   className="flex-1 p-[12px] min-w-0 text-gray-700 font-medium outline-none"
                   value={employee.jobtitle}
-                  onChange={handleEveryChange}
+                  onChange={onChange}
                   name="jobtitle"
                 >
                   <option value="">Select Position</option>
@@ -110,7 +104,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   className="flex-1 min-w-0 p-[12px] text-gray-700 font-medium outline-none"
                   value={employee.unit}
                   name="unit"
-                  onChange={handleEveryChange}
+                  onChange={onChange}
                 >
                   <option value="">Select Unit</option>
                   <option value="Administration">Administration</option>
@@ -133,7 +127,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                 <select
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
                   name="empstatus"
-                  onChange={handleEveryChange}
+                  onChange={onChange}
                   value={employee.empstatus}
                 >
                   <option value="">Select</option>
@@ -153,7 +147,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
                   value={employee.compassign}
                   name="compassign"
-                  onChange={handleEveryChange}
+                  onChange={onChange}
                   id=""
                 >
                   <option value="">Select</option>
