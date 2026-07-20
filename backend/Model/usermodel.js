@@ -45,7 +45,6 @@ const employeeSchema = new mongoose.Schema({
     enum: [
       "Coordinator",
       "Director of Health and Social Rehabilitation",
-
       "Director of Vocational Training",
       "Clinical Psychology",
       "Trainer",

@@ -71,7 +71,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   <option value="Director of Health and Social Rehabilitation">
                     Director of Health and Social Rehabilitation
                   </option>
-                  <option value="Director of Vocational Training<">
+                  <option value="Director of Vocational Training">
                     Director of Vocational Training
                   </option>
                   <option value="Clinical Psychology">
