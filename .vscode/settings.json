@@ -1,17 +1,24 @@
 {
   "cSpell.words": [
+    "Addressinfo",
     "bgimage",
     "bgimg",
     "bgpicture",
     "compassign",
     "edlevel",
+    "Educationinfo",
     "empldate",
+    "Employement",
+    "emproutes",
     "empstatus",
     "firstname",
+    "Jobinfo",
     "jobtitle",
     "lastname",
+    "Nextkininfo",
     "nextofkin",
     "nextofkinphone",
-    "nextofkinrelation"
+    "nextofkinrelation",
+    "setpreview"
   ]
 }

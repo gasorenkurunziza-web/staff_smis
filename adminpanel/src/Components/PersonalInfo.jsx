@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   FaUser,
   FaCamera,
@@ -9,8 +9,26 @@ import {
   FaIdCard,
   FaTransgender,
 } from "react-icons/fa";
+import { adminContext } from "../../Context/adminContext";
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ employee, setEmployee }) => {
+  const [preview, setpreview] = useState(null);
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEmployee({
+        ...employee,
+        photo: file,
+      });
+      setpreview(URL.createObjectURL(file));
+    }
+  };
+  const handleEveryChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* main div with shadow*/}
@@ -28,16 +46,34 @@ const PersonalInfo = () => {
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-3">
         {/*profile picture*/}
         <div className="">
-          <label className=" block text-sm font-bold text-gray-700 mb-3">
-            Photo
+          <label
+            htmlFor="photo"
+            className="cursor-pointer h-[260px] w-[220px] border-2 border-dashed border-yellow-300 flex flex-col items-center justify-center overflow-hidden"
+          >
+            {preview ? (
+              <img
+                src={preview}
+                alt=""
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            ) : (
+              <>
+                <div className="w-20 h-20 rounded-full bg-yellow-200 flex items-center justify-center">
+                  <FaCamera size={28} className="text-[#d89b17]" />
+                </div>
+                <p className="mt-5 font-semibold"> Upload Photo</p>
+                <span className="text-gray-400 text-sm">JPG,PNG up to 5MB</span>
+              </>
+            )}
+            <input
+              type="file"
+              id="photo"
+              accept="photo/*"
+              hidden
+              onChange={handlePhotoChange}
+            />
           </label>
-          <div className="cursor-point h-[250px] w-[230px] rounded-[1em] border-2 border-dashed border-yellow-300 flex flex-col items-center justify-center">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center bg-yellow-200">
-              <FaCamera size={20} className="text-[#d89b17]" />
-            </div>
-            <p className="text-gray-500 mt-4 font-semibold">Upload Photo</p>
-            <span className="text-gray-400 text-small">jpg,png up to 1MB</span>
-          </div>
+          {}
         </div>
         <div className="xl:col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
@@ -55,6 +91,9 @@ const PersonalInfo = () => {
                   type="text"
                   placeholder="Enter First Name"
                   className="outline-none py-6 px-3 text-xl"
+                  name="firstname"
+                  value={employee.firstname}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -71,6 +110,9 @@ const PersonalInfo = () => {
                   type="text"
                   placeholder="Enter Last Name"
                   className="outline-none py-6 px-3 text-xl"
+                  name="lastname"
+                  value={employee.lastname}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -87,6 +129,9 @@ const PersonalInfo = () => {
                   type="email"
                   placeholder="Enter your e-mail"
                   className="outline-none py-6 px-3 text-xl"
+                  name="email"
+                  value={employee.email}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -97,9 +142,9 @@ const PersonalInfo = () => {
                 <FaTransgender size={20} className="text-[#d89b17]" />
                 <select
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
-                  defaultValue=""
                   name="gender"
-                  id=""
+                  value={employee.gender}
+                  onChange={handleEveryChange}
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -119,8 +164,11 @@ const PersonalInfo = () => {
                 />
                 <input
                   type="text"
+                  name="nid"
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
+                  value={employee.nid}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -138,6 +186,9 @@ const PersonalInfo = () => {
                   type="text"
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
+                  value={employee.telephone}
+                  onChange={handleEveryChange}
+                  name="phone"
                 />
               </div>
             </div>

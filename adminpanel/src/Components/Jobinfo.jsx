@@ -12,7 +12,13 @@ import {
 } from "react-icons/fa";
 import { FcDepartment } from "react-icons/fc";
 
-const Jobinfo = () => {
+const Jobinfo = ({ employee, setEmployee }) => {
+  const handleEveryChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* main div with shadow*/}
@@ -44,6 +50,9 @@ const Jobinfo = () => {
                   type="date"
                   placeholder="Enter First Name"
                   className="outline-none py-6 px-3 text-xl"
+                  name="empldate"
+                  onChange={handleEveryChange}
+                  value={employee.empldate}
                 />
               </div>
             </div>
@@ -53,13 +62,13 @@ const Jobinfo = () => {
                 <FaSuitcase size={20} className="text-[#d89b17]" />
                 <select
                   className="flex-1 p-[12px] min-w-0 text-gray-700 font-medium outline-none"
-                  defaultValue=""
-                  name="jobTitle"
-                  id=""
+                  value={employee.jobtitle}
+                  onChange={handleEveryChange}
+                  name="jobtitle"
                 >
                   <option value="">Select Position</option>
                   <option value="Coordinator">Coordinator</option>
-                  <option value=" Director of Health and Social Rehabilitation">
+                  <option value="Director of Health and Social Rehabilitation">
                     Director of Health and Social Rehabilitation
                   </option>
                   <option value="Director of Vocational Training<">
@@ -99,9 +108,9 @@ const Jobinfo = () => {
                 <FcDepartment size={20} className="text-[#d89b17]" />
                 <select
                   className="flex-1 min-w-0 p-[12px] text-gray-700 font-medium outline-none"
-                  defaultValue=""
-                  name="gender"
-                  id=""
+                  value={employee.unit}
+                  name="unit"
+                  onChange={handleEveryChange}
                 >
                   <option value="">Select Unit</option>
                   <option value="Administration">Administration</option>
@@ -123,9 +132,9 @@ const Jobinfo = () => {
                 <FaCheck size={20} className="text-[#d89b17]" />
                 <select
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
-                  defaultValue=""
-                  name="gender"
-                  id=""
+                  name="empstatus"
+                  onChange={handleEveryChange}
+                  value={employee.empstatus}
                 >
                   <option value="">Select</option>
                   <option value="Active">Active</option>
@@ -142,8 +151,9 @@ const Jobinfo = () => {
                 <FaLaptop size={20} className="text-[#d89b17]" />
                 <select
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
-                  defaultValue=""
-                  name="gender"
+                  value={employee.compassign}
+                  name="compassign"
+                  onChange={handleEveryChange}
                   id=""
                 >
                   <option value="">Select</option>

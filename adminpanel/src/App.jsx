@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./Pages/Register";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
-
+export const backend_url = import.meta.env.VITE_BACKEND_URL;
 const App = () => {
   return (
     <div>

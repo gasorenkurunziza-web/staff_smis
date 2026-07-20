@@ -1,7 +1,13 @@
 import React from "react";
 import { FaGraduationCap, FaBookReader } from "react-icons/fa";
 
-const Educationinfo = () => {
+const Educationinfo = ({ employee, setEmployee }) => {
+  const handleEveryChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* Header */}
@@ -28,9 +34,10 @@ const Educationinfo = () => {
             />
 
             <select
-              name="educationLevel"
+              name="edlevel"
               defaultValue=""
               className="flex-1 min-w-0 bg-transparent outline-none text-gray-700 font-medium"
+              onChange={handleEveryChange}
             >
               <option value="" disabled>
                 Select Education Level
@@ -60,6 +67,8 @@ const Educationinfo = () => {
               type="text"
               placeholder="Enter Specialization"
               className="flex-1 bg-transparent outline-none text-gray-700"
+              name="spec"
+              onChange={handleEveryChange}
             />
           </div>
         </div>
