@@ -6,8 +6,7 @@ const employeeSchema = new mongoose.Schema({
   empstatus: {
     type: String,
     required: true,
-    enum: ["active", "inactive"],
-    default: "active",
+    enum: ["Active", "Not active"],
   },
   firstname: {
     type: String,
@@ -25,6 +24,7 @@ const employeeSchema = new mongoose.Schema({
   gender: {
     type: String,
     required: true,
+    enum: ["Male", "Female"],
   },
   nid: {
     type: Number,
@@ -37,29 +37,60 @@ const employeeSchema = new mongoose.Schema({
     required: true,
   },
   empldate: {
-    type: Date,
-    default: Date.now,
+    type: String,
   },
   jobtitle: {
     type: String,
     required: true,
+    enum: [
+      "Coordinator",
+      "Director of Health and Social Rehabilitation",
+
+      "Director of Vocational Training",
+      "Clinical Psychology",
+      "Trainer",
+      "Assistant Trainer",
+      "Mental Nurse Officer",
+      "Community Environmental Health Officer",
+      "Database and ICT",
+      "Chief Cook",
+      "Cook",
+      "Nurse",
+      "Laboratory Technician",
+      "Electrician",
+      "Logistic Officer",
+      "Production Officer",
+      "Navigator",
+      "Patient Attendant",
+    ],
   },
   unit: {
     type: String,
     required: true,
+    enum: [
+      "Administration",
+      "Vocational Training",
+      "Health and Social Rehabilitation",
+    ],
   },
   photo: {
     type: String,
     required: true,
   },
   compassign: {
-    type: Boolean,
-    default: false,
+    type: String,
     required: true,
   },
   edlevel: {
     type: String,
     required: true,
+    enum: [
+      "Advanced Diploma (S6)",
+      "Bachelor (A1)",
+      "Bachelor (A0)",
+      "Masters",
+      "PhD",
+    ],
   },
   spec: {
     type: String,
