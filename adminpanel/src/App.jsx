@@ -9,7 +9,7 @@ const App = () => {
   return (
     <div>
       <>
-        <Toaster position="top-right" richColors closeButton duration={3000} />
+        <Toaster position="top-center" richColors closeButton duration={3000} />
       </>
       ;
       <Routes>

@@ -1,0 +1,341 @@
+diff --git a/adminpanel/src/Components/Addressinfo.jsx b/adminpanel/src/Components/Addressinfo.jsx
+index efd0460..f7c958b 100644
+--- a/adminpanel/src/Components/Addressinfo.jsx
++++ b/adminpanel/src/Components/Addressinfo.jsx
+@@ -4,13 +4,7 @@ import { FaHome } from "react-icons/fa";
+ import { TbGridDots } from "react-icons/tb";
+ import { MdLocationCity } from "react-icons/md";
+ 
+-const Addressinfo = ({ employee, setEmployee }) => {
+-  const handleEveryChange = (e) => {
+-    setEmployee({
+-      ...employee,
+-      [e.target.name]: e.target.value,
+-    });
+-  };
++const Addressinfo = ({ employee, onChange }) => {
+   return (
+     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
+       {/* Header */}
+@@ -43,7 +37,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
+               placeholder="Enter District"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="district"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+@@ -63,7 +57,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Sector"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="sector"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+@@ -83,7 +77,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Cell"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="cell"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+@@ -102,7 +96,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Village"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="village"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+diff --git a/adminpanel/src/Components/Educationinfo.jsx b/adminpanel/src/Components/Educationinfo.jsx
+index fc37306..f961fe4 100644
+--- a/adminpanel/src/Components/Educationinfo.jsx
++++ b/adminpanel/src/Components/Educationinfo.jsx
+@@ -1,13 +1,7 @@
+ import React from "react";
+ import { FaGraduationCap, FaBookReader } from "react-icons/fa";
+ 
+-const Educationinfo = ({ employee, setEmployee }) => {
+-  const handleEveryChange = (e) => {
+-    setEmployee({
+-      ...employee,
+-      [e.target.name]: e.target.value,
+-    });
+-  };
++const Educationinfo = ({ employee, onChange }) => {
+   return (
+     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
+       {/* Header */}
+@@ -37,7 +31,7 @@ const Educationinfo = ({ employee, setEmployee }) => {
+               name="edlevel"
+               defaultValue=""
+               className="flex-1 min-w-0 bg-transparent outline-none text-gray-700 font-medium"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             >
+               <option value="" disabled>
+                 Select Education Level
+@@ -68,7 +62,7 @@ const Educationinfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Specialization"
+               className="flex-1 bg-transparent outline-none text-gray-700"
+               name="spec"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+diff --git a/adminpanel/src/Components/Jobinfo.jsx b/adminpanel/src/Components/Jobinfo.jsx
+index b842dd6..593bf6e 100644
+--- a/adminpanel/src/Components/Jobinfo.jsx
++++ b/adminpanel/src/Components/Jobinfo.jsx
+@@ -12,13 +12,7 @@ import {
+ } from "react-icons/fa";
+ import { FcDepartment } from "react-icons/fc";
+ 
+-const Jobinfo = ({ employee, setEmployee }) => {
+-  const handleEveryChange = (e) => {
+-    setEmployee({
+-      ...employee,
+-      [e.target.name]: e.target.value,
+-    });
+-  };
++const Jobinfo = ({ employee, onChange }) => {
+   return (
+     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
+       {/* main div with shadow*/}
+@@ -51,7 +45,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
+                   placeholder="Enter First Name"
+                   className="outline-none py-6 px-3 text-xl"
+                   name="empldate"
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                   value={employee.empldate}
+                 />
+               </div>
+@@ -63,7 +57,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
+                 <select
+                   className="flex-1 p-[12px] min-w-0 text-gray-700 font-medium outline-none"
+                   value={employee.jobtitle}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                   name="jobtitle"
+                 >
+                   <option value="">Select Position</option>
+@@ -110,7 +104,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
+                   className="flex-1 min-w-0 p-[12px] text-gray-700 font-medium outline-none"
+                   value={employee.unit}
+                   name="unit"
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 >
+                   <option value="">Select Unit</option>
+                   <option value="Administration">Administration</option>
+@@ -133,7 +127,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
+                 <select
+                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
+                   name="empstatus"
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                   value={employee.empstatus}
+                 >
+                   <option value="">Select</option>
+@@ -153,7 +147,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
+                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
+                   value={employee.compassign}
+                   name="compassign"
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                   id=""
+                 >
+                   <option value="">Select</option>
+diff --git a/adminpanel/src/Components/Nextkininfo.jsx b/adminpanel/src/Components/Nextkininfo.jsx
+index b8b02c5..7493e4b 100644
+--- a/adminpanel/src/Components/Nextkininfo.jsx
++++ b/adminpanel/src/Components/Nextkininfo.jsx
+@@ -4,13 +4,7 @@ import { FaHome, FaUserAlt, FaPhoneAlt } from "react-icons/fa";
+ import { TbGridDots } from "react-icons/tb";
+ import { ImUsers } from "react-icons/im";
+ 
+-const Nextkininfo = ({ employee, setEmployee }) => {
+-  const handleEveryChange = (e) => {
+-    setEmployee({
+-      ...employee,
+-      [e.target.name]: e.target.value,
+-    });
+-  };
++const Nextkininfo = ({ employee, onChange }) => {
+   return (
+     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
+       {/* Header */}
+@@ -43,7 +37,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Full Name"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="nextofkin"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+@@ -62,7 +56,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Relationship"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="nextofkinrelation"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+@@ -82,7 +76,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
+               placeholder="Enter Telephone"
+               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
+               name="nextofkinphone"
+-              onChange={handleEveryChange}
++              onChange={onChange}
+             />
+           </div>
+         </div>
+diff --git a/adminpanel/src/Components/PersonalInfo.jsx b/adminpanel/src/Components/PersonalInfo.jsx
+index e58b14f..8316aff 100644
+--- a/adminpanel/src/Components/PersonalInfo.jsx
++++ b/adminpanel/src/Components/PersonalInfo.jsx
+@@ -11,7 +11,7 @@ import {
+ } from "react-icons/fa";
+ import { adminContext } from "../../Context/adminContext";
+ 
+-const PersonalInfo = ({ employee, setEmployee }) => {
++const PersonalInfo = ({ employee, setEmployee, onChange }) => {
+   const [preview, setpreview] = useState(null);
+   const handlePhotoChange = (e) => {
+     const file = e.target.files[0];
+@@ -23,12 +23,6 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+       setpreview(URL.createObjectURL(file));
+     }
+   };
+-  const handleEveryChange = (e) => {
+-    setEmployee({
+-      ...employee,
+-      [e.target.name]: e.target.value,
+-    });
+-  };
+   return (
+     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
+       {/* main div with shadow*/}
+@@ -93,7 +87,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                   className="outline-none py-6 px-3 text-xl"
+                   name="firstname"
+                   value={employee.firstname}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 />
+               </div>
+             </div>
+@@ -112,7 +106,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                   className="outline-none py-6 px-3 text-xl"
+                   name="lastname"
+                   value={employee.lastname}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 />
+               </div>
+             </div>
+@@ -131,7 +125,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                   className="outline-none py-6 px-3 text-xl"
+                   name="email"
+                   value={employee.email}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 />
+               </div>
+             </div>
+@@ -144,7 +138,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
+                   name="gender"
+                   value={employee.gender}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 >
+                   <option value="">Select Gender</option>
+                   <option value="Male">Male</option>
+@@ -168,7 +162,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                   placeholder="Enter your NID"
+                   className="outline-none py-6 px-3 text-xl"
+                   value={employee.nid}
+-                  onChange={handleEveryChange}
++                  onChange={onChange}
+                 />
+               </div>
+             </div>
+@@ -184,10 +178,10 @@ const PersonalInfo = ({ employee, setEmployee }) => {
+                 />
+                 <input
+                   type="text"
+-                  placeholder="Enter your NID"
++                  placeholder="Enter your phone number"
+                   className="outline-none py-6 px-3 text-xl"
+-                  value={employee.telephone}
+-                  onChange={handleEveryChange}
++                  value={employee.phone}
++                  onChange={onChange}
+                   name="phone"
+                 />
+               </div>
+diff --git a/adminpanel/src/Pages/Register.jsx b/adminpanel/src/Pages/Register.jsx
+index f2b739c..cbb442e 100644
+--- a/adminpanel/src/Pages/Register.jsx
++++ b/adminpanel/src/Pages/Register.jsx
+@@ -35,6 +35,16 @@ const Register = () => {
+     nextofkinphone: "",
+     nextofkinrelation: "",
+   });
++
++  // Single shared change handler for every text/select input across all
++  // the form sections. Every input just needs name={field} onChange={handleChange}.
++  const handleChange = (e) => {
++    setEmployee({
++      ...employee,
++      [e.target.name]: e.target.value,
++    });
++  };
++
+   const save_db = async (e) => {
+     console.log(employee);
+     e.preventDefault();
+@@ -82,11 +92,15 @@ const Register = () => {
+   return (
+     <div className="mx-5 p-5 ">
+       <RegTitle />
+-      <PersonalInfo employee={employee} setEmployee={setEmployee} />
+-      <Jobinfo employee={employee} setEmployee={setEmployee} />
+-      <Educationinfo employee={employee} setEmployee={setEmployee} />
+-      <Addressinfo employee={employee} setEmployee={setEmployee} />
+-      <Nextkininfo employee={employee} setEmployee={setEmployee} />
++      <PersonalInfo
++        employee={employee}
++        setEmployee={setEmployee}
++        onChange={handleChange}
++      />
++      <Jobinfo employee={employee} onChange={handleChange} />
++      <Educationinfo employee={employee} onChange={handleChange} />
++      <Addressinfo employee={employee} onChange={handleChange} />
++      <Nextkininfo employee={employee} onChange={handleChange} />
+       <Buttons
+         save_db={save_db}
+         employee={employee}
+diff --git a/backend/Controller/empcontroller.js b/backend/Controller/empcontroller.js
+index fd7c21c..f004bdb 100644
+--- a/backend/Controller/empcontroller.js
++++ b/backend/Controller/empcontroller.js
+@@ -65,7 +65,6 @@ const createEmployee = async (req, res) => {
+     return res.status(201).json({
+       success: true,
+       message: "Employee created successfully",
+-      success: true,
+       employee,
+     });
+   } catch (error) {

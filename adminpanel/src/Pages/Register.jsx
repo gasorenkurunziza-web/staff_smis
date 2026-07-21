@@ -35,6 +35,16 @@ const Register = () => {
     nextofkinphone: "",
     nextofkinrelation: "",
   });
+
+  // Single shared change handler for every text/select input across all
+  // the form sections. Every input just needs name={field} onChange={handleChange}.
+  const handleChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const save_db = async (e) => {
     console.log(employee);
     e.preventDefault();
@@ -82,11 +92,15 @@ const Register = () => {
   return (
     <div className="mx-5 p-5 ">
       <RegTitle />
-      <PersonalInfo employee={employee} setEmployee={setEmployee} />
-      <Jobinfo employee={employee} setEmployee={setEmployee} />
-      <Educationinfo employee={employee} setEmployee={setEmployee} />
-      <Addressinfo employee={employee} setEmployee={setEmployee} />
-      <Nextkininfo employee={employee} setEmployee={setEmployee} />
+      <PersonalInfo
+        employee={employee}
+        setEmployee={setEmployee}
+        onChange={handleChange}
+      />
+      <Jobinfo employee={employee} onChange={handleChange} />
+      <Educationinfo employee={employee} onChange={handleChange} />
+      <Addressinfo employee={employee} onChange={handleChange} />
+      <Nextkininfo employee={employee} onChange={handleChange} />
       <Buttons
         save_db={save_db}
         employee={employee}

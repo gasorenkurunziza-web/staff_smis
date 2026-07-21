@@ -4,13 +4,7 @@ import { FaHome, FaUserAlt, FaPhoneAlt } from "react-icons/fa";
 import { TbGridDots } from "react-icons/tb";
 import { ImUsers } from "react-icons/im";
 
-const Nextkininfo = ({ employee, setEmployee }) => {
-  const handleEveryChange = (e) => {
-    setEmployee({
-      ...employee,
-      [e.target.name]: e.target.value,
-    });
-  };
+const Nextkininfo = ({ employee, onChange }) => {
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* Header */}
@@ -43,7 +37,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Full Name"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkin"
-              onChange={handleEveryChange}
+              onChange={onChange}
             />
           </div>
         </div>
@@ -62,7 +56,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Relationship"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkinrelation"
-              onChange={handleEveryChange}
+              onChange={onChange}
             />
           </div>
         </div>
@@ -82,7 +76,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Telephone"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkinphone"
-              onChange={handleEveryChange}
+              onChange={onChange}
             />
           </div>
         </div>
