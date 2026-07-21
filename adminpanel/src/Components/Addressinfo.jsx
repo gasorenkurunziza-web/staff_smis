@@ -4,7 +4,13 @@ import { FaHome } from "react-icons/fa";
 import { TbGridDots } from "react-icons/tb";
 import { MdLocationCity } from "react-icons/md";
 
-const Addressinfo = ({ employee, onChange }) => {
+const Addressinfo = ({ employee, setEmployee }) => {
+  const handleEveryChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
       {/* Header */}
@@ -37,7 +43,7 @@ const Addressinfo = ({ employee, onChange }) => {
               placeholder="Enter District"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="district"
-              onChange={onChange}
+              onChange={handleEveryChange}
             />
           </div>
         </div>
@@ -57,7 +63,7 @@ const Addressinfo = ({ employee, onChange }) => {
               placeholder="Enter Sector"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="sector"
-              onChange={onChange}
+              onChange={handleEveryChange}
             />
           </div>
         </div>
@@ -77,7 +83,7 @@ const Addressinfo = ({ employee, onChange }) => {
               placeholder="Enter Cell"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="cell"
-              onChange={onChange}
+              onChange={handleEveryChange}
             />
           </div>
         </div>
@@ -96,7 +102,7 @@ const Addressinfo = ({ employee, onChange }) => {
               placeholder="Enter Village"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="village"
-              onChange={onChange}
+              onChange={handleEveryChange}
             />
           </div>
         </div>

@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { adminContext } from "../../Context/adminContext";
 
-const PersonalInfo = ({ employee, setEmployee, onChange }) => {
+const PersonalInfo = ({ employee, setEmployee }) => {
   const [preview, setpreview] = useState(null);
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -22,6 +22,12 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
       });
       setpreview(URL.createObjectURL(file));
     }
+  };
+  const handleEveryChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value,
+    });
   };
   return (
     <div className="rounded-[2em] bg-white p-5 m-5 shadow-xl">
@@ -87,7 +93,7 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                   className="outline-none py-6 px-3 text-xl"
                   name="firstname"
                   value={employee.firstname}
-                  onChange={onChange}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -106,7 +112,7 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                   className="outline-none py-6 px-3 text-xl"
                   name="lastname"
                   value={employee.lastname}
-                  onChange={onChange}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -125,7 +131,7 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                   className="outline-none py-6 px-3 text-xl"
                   name="email"
                   value={employee.email}
-                  onChange={onChange}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -138,7 +144,7 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
                   name="gender"
                   value={employee.gender}
-                  onChange={onChange}
+                  onChange={handleEveryChange}
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -162,7 +168,7 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
                   value={employee.nid}
-                  onChange={onChange}
+                  onChange={handleEveryChange}
                 />
               </div>
             </div>
@@ -178,10 +184,10 @@ const PersonalInfo = ({ employee, setEmployee, onChange }) => {
                 />
                 <input
                   type="text"
-                  placeholder="Enter your phone number"
+                  placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
-                  value={employee.phone}
-                  onChange={onChange}
+                  value={employee.telephone}
+                  onChange={handleEveryChange}
                   name="phone"
                 />
               </div>

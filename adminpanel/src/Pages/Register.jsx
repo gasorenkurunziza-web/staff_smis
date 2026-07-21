@@ -8,10 +8,10 @@ import Nextkininfo from "../Components/Nextkininfo";
 import Buttons from "../Components/Buttons";
 import axios from "axios";
 import { backend_url } from "../App";
-import { toast } from "sonner";
 
 const Register = () => {
-  const initialEmployee = {
+  console.log(backend_url);
+  const [employee, setEmployee] = useState({
     empstatus: "",
     firstname: "",
     lastname: "",
@@ -33,20 +33,10 @@ const Register = () => {
     nextofkin: "",
     nextofkinphone: "",
     nextofkinrelation: "",
-  };
-  const [employee, setEmployee] = useState(initialEmployee);
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setEmployee({
-      ...employee,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+  });
   const save_db = async (e) => {
+    console.log(employee);
     e.preventDefault();
-    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("firstname", employee.firstname);
@@ -78,33 +68,28 @@ const Register = () => {
         backend_url + "/api/employee/register",
         formData,
       );
-      if (response.data.success) {
-        toast.success("Employee registered successfully");
-        setEmployee(initialEmployee);
+      if (response.success) {
+        console.log("Saved Successfully");
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        "Something went wrong while saving the employee";
-      toast.error(message);
-    } finally {
-      setLoading(false);
+      console.log(error);
+      console.log(error.response.data.message);
     }
   };
 
   return (
     <div className="mx-5 p-5 ">
       <RegTitle />
-      <PersonalInfo
+      <PersonalInfo employee={employee} setEmployee={setEmployee} />
+      <Jobinfo employee={employee} setEmployee={setEmployee} />
+      <Educationinfo employee={employee} setEmployee={setEmployee} />
+      <Addressinfo employee={employee} setEmployee={setEmployee} />
+      <Nextkininfo employee={employee} setEmployee={setEmployee} />
+      <Buttons
+        save_db={save_db}
         employee={employee}
         setEmployee={setEmployee}
-        onChange={handleChange}
       />
-      <Jobinfo employee={employee} onChange={handleChange} />
-      <Educationinfo employee={employee} onChange={handleChange} />
-      <Addressinfo employee={employee} onChange={handleChange} />
-      <Nextkininfo employee={employee} onChange={handleChange} />
-      <Buttons save_db={save_db} loading={loading} />
     </div>
   );
 };
