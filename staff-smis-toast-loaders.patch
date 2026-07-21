@@ -1,0 +1,184 @@
+diff --git a/adminpanel/src/Components/Buttons.jsx b/adminpanel/src/Components/Buttons.jsx
+index 27174f7..b912c9c 100644
+--- a/adminpanel/src/Components/Buttons.jsx
++++ b/adminpanel/src/Components/Buttons.jsx
+@@ -1,19 +1,35 @@
+ import React from "react";
+ import { FaSave } from "react-icons/fa";
++import Spinner from "./Spinner";
+ 
+-const Buttons = ({ employee, save_db }) => {
++const Buttons = ({ save_db, loading }) => {
+   return (
+     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
+-      <button className="w-full h-14 border-2 border-gray-500 bg-white rounded-[1em] font-semibold">
++      <button
++        type="button"
++        disabled={loading}
++        className="w-full h-14 border-2 border-gray-500 bg-white rounded-[1em] font-semibold disabled:opacity-50"
++      >
+         Cancel
+       </button>
+ 
+       <button
++        type="button"
+         onClick={save_db}
+-        className="w-full h-14 bg-[#d89b17] text-white rounded-[1em] font-semibold flex items-center justify-center gap-2"
++        disabled={loading}
++        className="w-full h-14 bg-[#d89b17] text-white rounded-[1em] font-semibold flex items-center justify-center gap-2 disabled:opacity-60"
+       >
+-        <FaSave size={18} />
+-        Save
++        {loading ? (
++          <>
++            <Spinner size={18} />
++            Saving...
++          </>
++        ) : (
++          <>
++            <FaSave size={18} />
++            Save
++          </>
++        )}
+       </button>
+     </div>
+   );
+diff --git a/adminpanel/src/Components/Spinner.jsx b/adminpanel/src/Components/Spinner.jsx
+new file mode 100644
+index 0000000..45c24a5
+--- /dev/null
++++ b/adminpanel/src/Components/Spinner.jsx
+@@ -0,0 +1,9 @@
++import React from "react";
++import { FaSpinner } from "react-icons/fa";
++
++// size in px, matches the size prop other react-icons take
++const Spinner = ({ size = 18, className = "" }) => (
++  <FaSpinner size={size} className={`animate-spin ${className}`} />
++);
++
++export default Spinner;
+diff --git a/adminpanel/src/Pages/Dashboard.jsx b/adminpanel/src/Pages/Dashboard.jsx
+index 982f2f5..9bdacb7 100644
+--- a/adminpanel/src/Pages/Dashboard.jsx
++++ b/adminpanel/src/Pages/Dashboard.jsx
+@@ -4,6 +4,7 @@ import { toast } from "sonner";
+ import { backend_url } from "../App";
+ import { adminContext } from "../../Context/adminContext";
+ import { FaUsers, FaUserCheck, FaUserSlash, FaBuilding } from "react-icons/fa";
++import Spinner from "../Components/Spinner";
+ 
+ const StatCard = ({ icon, label, value }) => (
+   <div className="flex items-center gap-4 bg-white rounded-[1.5em] shadow-lg p-5">
+@@ -122,7 +123,10 @@ const Dashboard = () => {
+           All Employees
+         </h2>
+         {loading ? (
+-          <p className="text-gray-400">Loading employees...</p>
++          <div className="flex items-center gap-3 text-gray-400 py-6">
++            <Spinner size={20} />
++            Loading employees...
++          </div>
+         ) : employees.length === 0 ? (
+           <p className="text-gray-400">No employees registered yet</p>
+         ) : (
+diff --git a/adminpanel/src/Pages/Login.jsx b/adminpanel/src/Pages/Login.jsx
+index ab028df..3061328 100644
+--- a/adminpanel/src/Pages/Login.jsx
++++ b/adminpanel/src/Pages/Login.jsx
+@@ -6,6 +6,7 @@ import axios from "axios";
+ import { toast } from "sonner";
+ import { backend_url } from "../App";
+ import { adminContext } from "../../Context/adminContext";
++import Spinner from "../Components/Spinner";
+ 
+ const Login = () => {
+   const { navigation, login } = useContext(adminContext);
+@@ -98,9 +99,16 @@ const Login = () => {
+             <button
+               type="submit"
+               disabled={loading}
+-              className=" hover:scale-[1.02] hover:shadow-lg text-[#d89d1e] bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-2xl w-4/5 p-5 font-bold rounded-[2em] text-center disabled:opacity-60"
++              className=" hover:scale-[1.02] hover:shadow-lg text-[#d89d1e] bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-2xl w-4/5 p-5 font-bold rounded-[2em] text-center disabled:opacity-60 flex items-center justify-center gap-3"
+             >
+-              {loading ? "Logging in..." : "Login"}
++              {loading ? (
++                <>
++                  <Spinner size={22} />
++                  Logging in...
++                </>
++              ) : (
++                "Login"
++              )}
+             </button>
+           </div>
+         </form>
+diff --git a/adminpanel/src/Pages/Register.jsx b/adminpanel/src/Pages/Register.jsx
+index cbb442e..f63310a 100644
+--- a/adminpanel/src/Pages/Register.jsx
++++ b/adminpanel/src/Pages/Register.jsx
+@@ -11,8 +11,7 @@ import { backend_url } from "../App";
+ import { toast } from "sonner";
+ 
+ const Register = () => {
+-  console.log(backend_url);
+-  const [employee, setEmployee] = useState({
++  const initialEmployee = {
+     empstatus: "",
+     firstname: "",
+     lastname: "",
+@@ -34,7 +33,9 @@ const Register = () => {
+     nextofkin: "",
+     nextofkinphone: "",
+     nextofkinrelation: "",
+-  });
++  };
++  const [employee, setEmployee] = useState(initialEmployee);
++  const [loading, setLoading] = useState(false);
+ 
+   // Single shared change handler for every text/select input across all
+   // the form sections. Every input just needs name={field} onChange={handleChange}.
+@@ -46,8 +47,8 @@ const Register = () => {
+   };
+ 
+   const save_db = async (e) => {
+-    console.log(employee);
+     e.preventDefault();
++    setLoading(true);
+     try {
+       const formData = new FormData();
+       formData.append("firstname", employee.firstname);
+@@ -80,12 +81,16 @@ const Register = () => {
+         formData,
+       );
+       if (response.data.success) {
+-        toast.success("Employee Registered successfully");
+-        console.log("Saved Successfully");
++        toast.success("Employee registered successfully");
++        setEmployee(initialEmployee);
+       }
+     } catch (error) {
+-      console.log(error);
+-      console.log(error.response.data.message);
++      const message =
++        error.response?.data?.message ||
++        "Something went wrong while saving the employee";
++      toast.error(message);
++    } finally {
++      setLoading(false);
+     }
+   };
+ 
+@@ -101,11 +106,7 @@ const Register = () => {
+       <Educationinfo employee={employee} onChange={handleChange} />
+       <Addressinfo employee={employee} onChange={handleChange} />
+       <Nextkininfo employee={employee} onChange={handleChange} />
+-      <Buttons
+-        save_db={save_db}
+-        employee={employee}
+-        setEmployee={setEmployee}
+-      />
++      <Buttons save_db={save_db} loading={loading} />
+     </div>
+   );
+ };

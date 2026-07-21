@@ -1,0 +1,656 @@
+diff --git a/adminpanel/Context/adminContext.jsx b/adminpanel/Context/adminContext.jsx
+index 5a7eb45..26d763a 100644
+--- a/adminpanel/Context/adminContext.jsx
++++ b/adminpanel/Context/adminContext.jsx
+@@ -1,10 +1,46 @@
+-import { createContext } from "react";
++import { createContext, useState, useEffect } from "react";
+ import { useNavigate } from "react-router-dom";
++import axios from "axios";
+ 
+ export const adminContext = createContext();
++
+ const AdminContextProvider = (props) => {
+   const navigation = useNavigate();
+-  const value = { navigation };
++
++  // Restore session from localStorage on first load, so refreshing the
++  // page doesn't log the admin out.
++  const [token, setToken] = useState(localStorage.getItem("token") || null);
++  const [admin, setAdmin] = useState(() => {
++    const stored = localStorage.getItem("admin");
++    return stored ? JSON.parse(stored) : null;
++  });
++
++  // Whenever the token changes, keep axios' default header and
++  // localStorage in sync so every request automatically carries it.
++  useEffect(() => {
++    if (token) {
++      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
++      localStorage.setItem("token", token);
++    } else {
++      delete axios.defaults.headers.common["Authorization"];
++      localStorage.removeItem("token");
++    }
++  }, [token]);
++
++  const login = (newToken, adminData) => {
++    setToken(newToken);
++    setAdmin(adminData);
++    localStorage.setItem("admin", JSON.stringify(adminData));
++  };
++
++  const logout = () => {
++    setToken(null);
++    setAdmin(null);
++    localStorage.removeItem("admin");
++    navigation("/");
++  };
++
++  const value = { navigation, token, admin, login, logout };
+   return (
+     <adminContext.Provider value={value}>
+       {props.children}
+@@ -12,3 +48,4 @@ const AdminContextProvider = (props) => {
+   );
+ };
+ export default AdminContextProvider;
++
+diff --git a/adminpanel/src/App.jsx b/adminpanel/src/App.jsx
+index 8335c9c..fd5eb72 100644
+--- a/adminpanel/src/App.jsx
++++ b/adminpanel/src/App.jsx
+@@ -1,21 +1,40 @@
+-import React from "react";
+-import { Routes, Route } from "react-router-dom";
++import React, { useContext } from "react";
++import { Routes, Route, Navigate } from "react-router-dom";
+ import Register from "./Pages/Register";
+ import Login from "./Pages/Login";
+ import Dashboard from "./Pages/Dashboard";
+ export const backend_url = import.meta.env.VITE_BACKEND_URL;
+ import { Toaster } from "sonner";
++import { adminContext } from "../Context/adminContext";
++
++// Redirects to the login page if there's no admin session.
++const ProtectedRoute = ({ children }) => {
++  const { token } = useContext(adminContext);
++  return token ? children : <Navigate to="/" replace />;
++};
++
+ const App = () => {
+   return (
+     <div>
+-      <>
+-        <Toaster position="top-right" richColors closeButton duration={3000} />
+-      </>
+-      ;
++      <Toaster position="top-right" richColors closeButton duration={3000} />
+       <Routes>
+         <Route path="/" element={<Login />} />
+-        <Route path="/register" element={<Register />} />
+-        <Route path="/dashboard" element={<Dashboard />} />
++        <Route
++          path="/register"
++          element={
++            <ProtectedRoute>
++              <Register />
++            </ProtectedRoute>
++          }
++        />
++        <Route
++          path="/dashboard"
++          element={
++            <ProtectedRoute>
++              <Dashboard />
++            </ProtectedRoute>
++          }
++        />
+       </Routes>
+     </div>
+   );
+diff --git a/adminpanel/src/Pages/Dashboard.jsx b/adminpanel/src/Pages/Dashboard.jsx
+index bef6cbb..982f2f5 100644
+--- a/adminpanel/src/Pages/Dashboard.jsx
++++ b/adminpanel/src/Pages/Dashboard.jsx
+@@ -1,7 +1,172 @@
+-import React from "react";
++import React, { useContext, useEffect, useMemo, useState } from "react";
++import axios from "axios";
++import { toast } from "sonner";
++import { backend_url } from "../App";
++import { adminContext } from "../../Context/adminContext";
++import { FaUsers, FaUserCheck, FaUserSlash, FaBuilding } from "react-icons/fa";
++
++const StatCard = ({ icon, label, value }) => (
++  <div className="flex items-center gap-4 bg-white rounded-[1.5em] shadow-lg p-5">
++    <div className="w-12 h-12 rounded-xl bg-yellow-200 flex items-center justify-center flex-shrink-0">
++      {icon}
++    </div>
++    <div>
++      <p className="text-2xl font-bold text-gray-800">{value}</p>
++      <p className="text-sm text-gray-500">{label}</p>
++    </div>
++  </div>
++);
+ 
+ const Dashboard = () => {
+-  return <div></div>;
++  const { admin, logout } = useContext(adminContext);
++  const [employees, setEmployees] = useState([]);
++  const [loading, setLoading] = useState(true);
++
++  useEffect(() => {
++    const fetchEmployees = async () => {
++      try {
++        const response = await axios.get(backend_url + "/api/employee/all");
++        setEmployees(response.data);
++      } catch (error) {
++        const message =
++          error.response?.data?.message || "Could not load employees";
++        toast.error(message);
++      } finally {
++        setLoading(false);
++      }
++    };
++    fetchEmployees();
++  }, []);
++
++  // Derive the summary stats from whatever employee list we already have,
++  // instead of asking the backend for separate count endpoints.
++  const stats = useMemo(() => {
++    const total = employees.length;
++    const active = employees.filter((e) => e.empstatus === "Active").length;
++    const notActive = total - active;
++
++    const byUnit = employees.reduce((acc, e) => {
++      acc[e.unit] = (acc[e.unit] || 0) + 1;
++      return acc;
++    }, {});
++
++    return { total, active, notActive, byUnit };
++  }, [employees]);
++
++  return (
++    <div className="mx-5 p-5">
++      <div className="flex items-center justify-between mb-8">
++        <div>
++          <h1 className="text-4xl font-bold text-[#d89b17]">Dashboard</h1>
++          {admin && (
++            <p className="text-gray-400 mt-2 ml-1">Welcome back, {admin.name}</p>
++          )}
++        </div>
++        <button
++          onClick={logout}
++          className="text-[#d89b17] border-2 border-[#d89b17] rounded-[1em] px-6 py-2 font-semibold hover:bg-[#d89b17] hover:text-white transition"
++        >
++          Logout
++        </button>
++      </div>
++
++      {/* Stat cards */}
++      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
++        <StatCard
++          icon={<FaUsers size={20} className="text-[#d89b17]" />}
++          label="Total Employees"
++          value={stats.total}
++        />
++        <StatCard
++          icon={<FaUserCheck size={20} className="text-[#d89b17]" />}
++          label="Active"
++          value={stats.active}
++        />
++        <StatCard
++          icon={<FaUserSlash size={20} className="text-[#d89b17]" />}
++          label="Not Active"
++          value={stats.notActive}
++        />
++        <StatCard
++          icon={<FaBuilding size={20} className="text-[#d89b17]" />}
++          label="Units"
++          value={Object.keys(stats.byUnit).length}
++        />
++      </div>
++
++      {/* Breakdown by unit */}
++      <div className="bg-white rounded-[1.5em] shadow-lg p-5 mb-8">
++        <h2 className="text-xl font-semibold text-[#d89b17] mb-4">
++          Employees by Unit
++        </h2>
++        {Object.keys(stats.byUnit).length === 0 ? (
++          <p className="text-gray-400">No data yet</p>
++        ) : (
++          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
++            {Object.entries(stats.byUnit).map(([unit, count]) => (
++              <div
++                key={unit}
++                className="flex justify-between items-center bg-yellow-50 rounded-[1em] px-4 py-3"
++              >
++                <span className="text-gray-700">{unit}</span>
++                <span className="font-bold text-[#d89b17]">{count}</span>
++              </div>
++            ))}
++          </div>
++        )}
++      </div>
++
++      {/* Employee table */}
++      <div className="bg-white rounded-[1.5em] shadow-lg p-5 overflow-x-auto">
++        <h2 className="text-xl font-semibold text-[#d89b17] mb-4">
++          All Employees
++        </h2>
++        {loading ? (
++          <p className="text-gray-400">Loading employees...</p>
++        ) : employees.length === 0 ? (
++          <p className="text-gray-400">No employees registered yet</p>
++        ) : (
++          <table className="w-full text-left">
++            <thead>
++              <tr className="border-b border-gray-200 text-gray-500 text-sm">
++                <th className="py-3 pr-4">Name</th>
++                <th className="py-3 pr-4">Job Title</th>
++                <th className="py-3 pr-4">Unit</th>
++                <th className="py-3 pr-4">Status</th>
++                <th className="py-3 pr-4">Phone</th>
++              </tr>
++            </thead>
++            <tbody>
++              {employees.map((emp) => (
++                <tr
++                  key={emp._id}
++                  className="border-b border-gray-100 hover:bg-yellow-50"
++                >
++                  <td className="py-3 pr-4">
++                    {emp.firstname} {emp.lastname}
++                  </td>
++                  <td className="py-3 pr-4">{emp.jobtitle}</td>
++                  <td className="py-3 pr-4">{emp.unit}</td>
++                  <td className="py-3 pr-4">
++                    <span
++                      className={
++                        emp.empstatus === "Active"
++                          ? "text-green-600 font-semibold"
++                          : "text-red-500 font-semibold"
++                      }
++                    >
++                      {emp.empstatus}
++                    </span>
++                  </td>
++                  <td className="py-3 pr-4">{emp.phone}</td>
++                </tr>
++              ))}
++            </tbody>
++          </table>
++        )}
++      </div>
++    </div>
++  );
+ };
+ 
+ export default Dashboard;
+diff --git a/adminpanel/src/Pages/Login.jsx b/adminpanel/src/Pages/Login.jsx
+index 0744925..ab028df 100644
+--- a/adminpanel/src/Pages/Login.jsx
++++ b/adminpanel/src/Pages/Login.jsx
+@@ -1,21 +1,47 @@
+-import React, { useContext } from "react";
++import React, { useContext, useState } from "react";
+ import { assets } from "../assets/assets";
+ import { FaUserAlt } from "react-icons/fa";
+ import { FaLock } from "react-icons/fa";
+-
+-import {
+-  User,
+-  Lock,
+-  GraduationCap,
+-  BookOpen,
+-  MapPinned,
+-  MapPin,
+-  House,
+-} from "lucide-react";
++import axios from "axios";
++import { toast } from "sonner";
++import { backend_url } from "../App";
+ import { adminContext } from "../../Context/adminContext";
+ 
+ const Login = () => {
+-  const { navigation } = useContext(adminContext);
++  const { navigation, login } = useContext(adminContext);
++  const [email, setEmail] = useState("");
++  const [password, setPassword] = useState("");
++  const [loading, setLoading] = useState(false);
++
++  const handleLogin = async (e) => {
++    e.preventDefault();
++
++    if (!email || !password) {
++      toast.error("Please enter both email and password");
++      return;
++    }
++
++    setLoading(true);
++    try {
++      const response = await axios.post(backend_url + "/api/admin/login", {
++        email,
++        password,
++      });
++
++      if (response.data.success) {
++        login(response.data.token, response.data.admin);
++        toast.success("Logged in successfully");
++        navigation("/dashboard");
++      }
++    } catch (error) {
++      const message =
++        error.response?.data?.message || "Something went wrong, try again";
++      toast.error(message);
++    } finally {
++      setLoading(false);
++    }
++  };
++
+   return (
+     <div className="h-screen flex">
+       {/*left side*/}
+@@ -25,7 +51,10 @@ const Login = () => {
+       ></div>
+       {/*right side*/}
+       <div className=" w-full sm: w-full md:w-1/2 lg:w-1/2 xl:w-1/2 p-5 sm:p-6 md:p-10 lg:p-16 bg-gradient-to-br from-yellow-50 via white to-yellow-100 flex justify-center items-center">
+-        <div className="flex flex-col bg-white rounded-[25px] shadow-7xl flex justify-start items-center w-[460px] md:w-[460px] lg:w-[500px] xl:w-[600px] 2xl:w-[700px] h-[600px] md:h-[600px] lg:h-[600px] xl:h-[600px] 2xl:h-[700px]">
++        <form
++          onSubmit={handleLogin}
++          className="flex flex-col bg-white rounded-[25px] shadow-7xl flex justify-start items-center w-[460px] md:w-[460px] lg:w-[500px] xl:w-[600px] 2xl:w-[700px] h-[600px] md:h-[600px] lg:h-[600px] xl:h-[600px] 2xl:h-[700px]"
++        >
+           <h2 className=" mt-5 lg:mt-0 font-bold text-center text-yellow-600 p-5 sm:p-6 md:p-8 lg:p-16  2xl:p-14 text-4xl sm:text-4xl xl:text-4xl">
+             Admin Panel
+           </h2>
+@@ -35,9 +64,11 @@ const Login = () => {
+               className="text-[#D89D1E] ml-5 flex-shrink-0"
+             />
+             <input
+-              type="text"
++              type="email"
+               placeholder="Email"
+               className="outline-none py-6 px-3 text-2xl"
++              value={email}
++              onChange={(e) => setEmail(e.target.value)}
+             />
+           </div>
+           <div className="flex w-4/5 items-center bg-white rounded-[2em] shadow-lg mb-10">
+@@ -47,12 +78,15 @@ const Login = () => {
+               type="password"
+               placeholder="Password"
+               className="outline-none py-6 px-3 text-2xl"
++              value={password}
++              onChange={(e) => setPassword(e.target.value)}
+             />
+           </div>
+           {/* Register Button*/}
+ 
+           <div className="w-full flex justify-end mt-4  ">
+             <button
++              type="button"
+               onClick={() => navigation("/register")}
+               className="text-[#d89d1e] text-xl hover:underline pr-20 "
+             >
+@@ -61,11 +95,15 @@ const Login = () => {
+           </div>
+           {/* Login Button*/}
+           <div className="w-full flex justify-center mt-4  ">
+-            <button className=" hover:scale-[1.02] hover:shadow-lg text-[#d89d1e] bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-2xl w-4/5 p-5 font-bold rounded-[2em] text-center">
+-              Login
++            <button
++              type="submit"
++              disabled={loading}
++              className=" hover:scale-[1.02] hover:shadow-lg text-[#d89d1e] bg-gradient-to-r from-yellow-500 to-amber-600 text-white text-2xl w-4/5 p-5 font-bold rounded-[2em] text-center disabled:opacity-60"
++            >
++              {loading ? "Logging in..." : "Login"}
+             </button>
+           </div>
+-        </div>
++        </form>
+       </div>
+     </div>
+   );
+diff --git a/backend/Controller/admincontroller.js b/backend/Controller/admincontroller.js
+new file mode 100644
+index 0000000..3893d26
+--- /dev/null
++++ b/backend/Controller/admincontroller.js
+@@ -0,0 +1,99 @@
++import bcrypt from "bcryptjs";
++import jwt from "jsonwebtoken";
++import adminModel from "../Model/adminmodel.js";
++
++const createToken = (adminId) => {
++  return jwt.sign({ id: adminId }, process.env.JWT_SECRET, {
++    expiresIn: "7d",
++  });
++};
++
++// Creates a new admin account. In a real deployment you'd want this
++// locked down (e.g. only callable by an existing admin, or run once
++// during setup) rather than left open to the public.
++const registerAdmin = async (req, res) => {
++  try {
++    const { name, email, password } = req.body;
++
++    if (!name || !email || !password) {
++      return res.status(400).json({
++        success: false,
++        message: "Name, email and password are all required",
++      });
++    }
++
++    const existing = await adminModel.findOne({ email });
++    if (existing) {
++      return res.status(409).json({
++        success: false,
++        message: "An admin with this email already exists",
++      });
++    }
++
++    const salt = await bcrypt.genSalt(10);
++    const hashedPassword = await bcrypt.hash(password, salt);
++
++    const admin = await adminModel.create({
++      name,
++      email,
++      password: hashedPassword,
++    });
++
++    const token = createToken(admin._id);
++
++    return res.status(201).json({
++      success: true,
++      message: "Admin account created successfully",
++      token,
++      admin: { id: admin._id, name: admin.name, email: admin.email },
++    });
++  } catch (error) {
++    console.error(error);
++    return res.status(500).json({ success: false, message: error.message });
++  }
++};
++
++const loginAdmin = async (req, res) => {
++  try {
++    const { email, password } = req.body;
++
++    if (!email || !password) {
++      return res.status(400).json({
++        success: false,
++        message: "Email and password are required",
++      });
++    }
++
++    const admin = await adminModel.findOne({ email });
++    if (!admin) {
++      // Same message as a wrong password, on purpose — don't reveal
++      // whether the email exists in the system.
++      return res.status(401).json({
++        success: false,
++        message: "Invalid email or password",
++      });
++    }
++
++    const passwordMatches = await bcrypt.compare(password, admin.password);
++    if (!passwordMatches) {
++      return res.status(401).json({
++        success: false,
++        message: "Invalid email or password",
++      });
++    }
++
++    const token = createToken(admin._id);
++
++    return res.status(200).json({
++      success: true,
++      message: "Login successful",
++      token,
++      admin: { id: admin._id, name: admin.name, email: admin.email },
++    });
++  } catch (error) {
++    console.error(error);
++    return res.status(500).json({ success: false, message: error.message });
++  }
++};
++
++export { registerAdmin, loginAdmin };
+diff --git a/backend/Middleware/auth.js b/backend/Middleware/auth.js
+new file mode 100644
+index 0000000..82b25f3
+--- /dev/null
++++ b/backend/Middleware/auth.js
+@@ -0,0 +1,28 @@
++import jwt from "jsonwebtoken";
++
++// Expects a header: Authorization: Bearer <token>
++const protect = (req, res, next) => {
++  const authHeader = req.headers.authorization;
++
++  if (!authHeader || !authHeader.startsWith("Bearer ")) {
++    return res.status(401).json({
++      success: false,
++      message: "Not authorized, please log in",
++    });
++  }
++
++  const token = authHeader.split(" ")[1];
++
++  try {
++    const decoded = jwt.verify(token, process.env.JWT_SECRET);
++    req.adminId = decoded.id;
++    next();
++  } catch (error) {
++    return res.status(401).json({
++      success: false,
++      message: "Session expired or invalid, please log in again",
++    });
++  }
++};
++
++export default protect;
+diff --git a/backend/Model/adminmodel.js b/backend/Model/adminmodel.js
+new file mode 100644
+index 0000000..4e9a2bd
+--- /dev/null
++++ b/backend/Model/adminmodel.js
+@@ -0,0 +1,25 @@
++import mongoose from "mongoose";
++
++const adminSchema = new mongoose.Schema(
++  {
++    name: {
++      type: String,
++      required: true,
++    },
++    email: {
++      type: String,
++      required: true,
++      unique: true,
++      lowercase: true,
++      trim: true,
++    },
++    password: {
++      // stored as a bcrypt hash, never plain text
++      type: String,
++      required: true,
++    },
++  },
++  { timestamps: true },
++);
++
++export default mongoose.model("adminModel", adminSchema);
+diff --git a/backend/Routes/adminroutes.js b/backend/Routes/adminroutes.js
+new file mode 100644
+index 0000000..de82edb
+--- /dev/null
++++ b/backend/Routes/adminroutes.js
+@@ -0,0 +1,9 @@
++import express from "express";
++import { registerAdmin, loginAdmin } from "../Controller/admincontroller.js";
++
++const adminroutes = express.Router();
++
++adminroutes.post("/register", registerAdmin);
++adminroutes.post("/login", loginAdmin);
++
++export default adminroutes;
+diff --git a/backend/Routes/emproutes.js b/backend/Routes/emproutes.js
+index d2c17d4..967a712 100644
+--- a/backend/Routes/emproutes.js
++++ b/backend/Routes/emproutes.js
+@@ -1,12 +1,13 @@
+ import express from "express";
+ import upload from "../Middleware/multer.js";
++import protect from "../Middleware/auth.js";
+ import {
+   getAllEmployees,
+   createEmployee,
+ } from "../Controller/empcontroller.js";
+ const emproutes = express.Router();
+ 
+-emproutes.post("/register", upload.single("photo"), createEmployee);
+-emproutes.get("/all", getAllEmployees);
++emproutes.post("/register", protect, upload.single("photo"), createEmployee);
++emproutes.get("/all", protect, getAllEmployees);
+ 
+ export default emproutes;
+diff --git a/backend/package.json b/backend/package.json
+index b11e87f..c6179e9 100644
+--- a/backend/package.json
++++ b/backend/package.json
+@@ -12,10 +12,12 @@
+     "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "dependencies": {
++    "bcryptjs": "^2.4.3",
+     "cloudinary": "^2.10.0",
+     "cors": "^2.8.6",
+     "dotenv": "^17.4.2",
+     "express": "^5.2.1",
++    "jsonwebtoken": "^9.0.2",
+     "mongoose": "^9.7.3",
+     "multer": "^2.2.0",
+     "nodemon": "^3.1.14"
+diff --git a/backend/server.js b/backend/server.js
+index 090b227..86bdfab 100644
+--- a/backend/server.js
++++ b/backend/server.js
+@@ -1,6 +1,7 @@
+ import express from "express";
+ import connectDB from "./Config/db_connect.js";
+ import emproutes from "./Routes/emproutes.js";
++import adminroutes from "./Routes/adminroutes.js";
+ import cors from "cors";
+ 
+ const app = express();
+@@ -12,6 +13,7 @@ app.get("/", (req, res) => {
+   res.send("Hello World");
+ });
+ app.use("/api/employee", emproutes);
++app.use("/api/admin", adminroutes);
+ app.listen(port, () => {
+   console.log(`Server is running on http://localhost:${port}`);
+ });
