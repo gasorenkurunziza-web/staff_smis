@@ -13,6 +13,37 @@ import {
 import { FcDepartment } from "react-icons/fc";
 
 const Jobinfo = ({ employee, setEmployee }) => {
+  const getUnit = (jobTitle) => {
+    const administration = [
+      "Coordinator",
+      "Database and ICT",
+      "Logistic Officer",
+      "Electrician",
+      "Chief Cook",
+      "Cook",
+      "Navigator",
+    ];
+
+    const health = [
+      "Director of Health and Social Rehabilitation",
+      "Community Environmental Health Officer",
+      "Nurse",
+      "Laboratory Technician",
+      "Patient Attendant",
+      "Mental Nurse Officer",
+      "Clinical Psychology",
+    ];
+
+    if (administration.includes(jobTitle)) {
+      return "Administration";
+    }
+
+    if (health.includes(jobTitle)) {
+      return "Health and Social Rehabilitation";
+    }
+
+    return "Vocational Training";
+  };
   const handleEveryChange = (e) => {
     setEmployee({
       ...employee,
@@ -48,6 +79,8 @@ const Jobinfo = ({ employee, setEmployee }) => {
                 />
                 <input
                   type="date"
+                  max={new Date().toISOString().split("T")[0]}
+                  min="2000-01-01"
                   placeholder="Enter First Name"
                   className="outline-none py-6 px-3 text-xl"
                   name="empldate"
@@ -63,7 +96,14 @@ const Jobinfo = ({ employee, setEmployee }) => {
                 <select
                   className="flex-1 p-[12px] min-w-0 text-gray-700 font-medium outline-none"
                   value={employee.jobtitle}
-                  onChange={handleEveryChange}
+                  onChange={(e) => {
+                    const jobtitle = e.target.value;
+                    setEmployee((prev) => ({
+                      ...prev,
+                      jobtitle,
+                      unit: getUnit(jobtitle),
+                    }));
+                  }}
                   name="jobtitle"
                 >
                   <option value="">Select Position</option>
@@ -71,7 +111,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   <option value="Director of Health and Social Rehabilitation">
                     Director of Health and Social Rehabilitation
                   </option>
-                  <option value="Director of Vocational Training<">
+                  <option value="Director of Vocational Training">
                     Director of Vocational Training
                   </option>
                   <option value="Clinical Psychology">
@@ -110,6 +150,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   className="flex-1 min-w-0 p-[12px] text-gray-700 font-medium outline-none"
                   value={employee.unit}
                   name="unit"
+                  disabled
                   onChange={handleEveryChange}
                 >
                   <option value="">Select Unit</option>
@@ -154,7 +195,6 @@ const Jobinfo = ({ employee, setEmployee }) => {
                   value={employee.compassign}
                   name="compassign"
                   onChange={handleEveryChange}
-                  id=""
                 >
                   <option value="">Select</option>
                   <option value="Yes">Yes</option>

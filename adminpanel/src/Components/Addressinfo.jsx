@@ -44,6 +44,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="district"
               onChange={handleEveryChange}
+              value={employee.district}
             />
           </div>
         </div>
@@ -64,6 +65,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="sector"
               onChange={handleEveryChange}
+              value={employee.sector}
             />
           </div>
         </div>
@@ -84,6 +86,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="cell"
               onChange={handleEveryChange}
+              value={employee.cell}
             />
           </div>
         </div>
@@ -103,6 +106,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="village"
               onChange={handleEveryChange}
+              value={employee.village}
             />
           </div>
         </div>

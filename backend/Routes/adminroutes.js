@@ -1,9 +1,19 @@
 import express from "express";
-import { registerAdmin, loginAdmin } from "../Controller/admincontroller.js";
 
-const adminroutes = express.Router();
+const router = express.Router();
 
-adminroutes.post("/register", registerAdmin);
-adminroutes.post("/login", loginAdmin);
+router.get("/health", (req, res) => {
+  res.json({
+    success: true,
+    message: "Admin routes are available",
+  });
+});
 
-export default adminroutes;
+router.post("/login", (req, res) => {
+  res.status(501).json({
+    success: false,
+    message: "Admin login is not implemented yet",
+  });
+});
+
+export default router;

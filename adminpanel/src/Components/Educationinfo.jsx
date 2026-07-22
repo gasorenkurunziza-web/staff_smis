@@ -35,7 +35,7 @@ const Educationinfo = ({ employee, setEmployee }) => {
 
             <select
               name="edlevel"
-              defaultValue=""
+              values={employee.edlevel}
               className="flex-1 min-w-0 bg-transparent outline-none text-gray-700 font-medium"
               onChange={handleEveryChange}
             >
@@ -68,6 +68,7 @@ const Educationinfo = ({ employee, setEmployee }) => {
               placeholder="Enter Specialization"
               className="flex-1 bg-transparent outline-none text-gray-700"
               name="spec"
+              values={employee.spec}
               onChange={handleEveryChange}
             />
           </div>

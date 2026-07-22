@@ -116,25 +116,6 @@ const PersonalInfo = ({ employee, setEmployee }) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col p-3">
-              <label className="block text-sm mb-2 font-bold text-gray">
-                E-mail
-              </label>
-              <div className="flex items-center bg-white rounded-[1em] shadow-lg mb-2">
-                <FaEnvelope
-                  size={20}
-                  className="text-[#D89D1E] ml-5 flex-shrink-0"
-                />
-                <input
-                  type="email"
-                  placeholder="Enter your e-mail"
-                  className="outline-none py-6 px-3 text-xl"
-                  name="email"
-                  value={employee.email}
-                  onChange={handleEveryChange}
-                />
-              </div>
-            </div>
             {/*gender field*/}
             <div className=" flex flex-col p-3">
               <label className="block text-sm mb-2 font-bold">Gender</label>
@@ -186,7 +167,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
                   type="text"
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
-                  value={employee.telephone}
+                  value={employee.phone}
                   onChange={handleEveryChange}
                   name="phone"
                 />

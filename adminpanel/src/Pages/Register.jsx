@@ -8,6 +8,7 @@ import Nextkininfo from "../Components/Nextkininfo";
 import Buttons from "../Components/Buttons";
 import axios from "axios";
 import { backend_url } from "../App";
+import { toast } from "sonner";
 
 const Register = () => {
   console.log(backend_url);
@@ -15,7 +16,6 @@ const Register = () => {
     empstatus: "",
     firstname: "",
     lastname: "",
-    email: "",
     gender: "",
     nid: "",
     phone: "",
@@ -35,13 +35,12 @@ const Register = () => {
     nextofkinrelation: "",
   });
   const save_db = async (e) => {
-    console.log(employee);
     e.preventDefault();
+    const loading = toast.loading("Saving to db........");
     try {
       const formData = new FormData();
       formData.append("firstname", employee.firstname);
       formData.append("lastname", employee.lastname);
-      formData.append("email", employee.email);
       formData.append("gender", employee.gender);
       formData.append("nid", employee.nid);
       formData.append("phone", employee.phone);
@@ -65,15 +64,27 @@ const Register = () => {
       }
 
       const response = await axios.post(
-        backend_url + "/api/employee/register",
+        `${backend_url}/api/employee/register`,
         formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
-      if (response.success) {
-        console.log("Saved Successfully");
+
+      if (response?.data?.success) {
+        toast.success("Saved Successfully", { id: loading });
+        console.log("Saved Successfully", response.data.message);
+      } else {
+        toast.error("Save failed", { id: loading });
+        console.log("Save failed", response?.data?.message);
       }
     } catch (error) {
       console.log(error);
-      console.log(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Request failed", {
+        id: loading,
+      });
     }
   };
 

@@ -43,6 +43,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Full Name"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkin"
+              value={employee.nextofkin}
               onChange={handleEveryChange}
             />
           </div>
@@ -62,6 +63,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Relationship"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkinrelation"
+              value={employee.nextofkinrelation}
               onChange={handleEveryChange}
             />
           </div>
@@ -82,6 +84,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
               placeholder="Enter Telephone"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkinphone"
+              value={employee.nextofkinphone}
               onChange={handleEveryChange}
             />
           </div>

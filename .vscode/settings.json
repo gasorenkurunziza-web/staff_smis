@@ -5,6 +5,7 @@
     "bgimage",
     "bgimg",
     "bgpicture",
+    "checkemailexist",
     "compassign",
     "edlevel",
     "Educationinfo",
@@ -20,6 +21,8 @@
     "nextofkin",
     "nextofkinphone",
     "nextofkinrelation",
-    "setpreview"
+    "randomnumber",
+    "setpreview",
+    "usermodel"
   ]
 }
