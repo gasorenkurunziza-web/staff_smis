@@ -25,7 +25,7 @@ const Addressinfo = ({ employee, setEmployee }) => {
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-4 sm:grid-cols-2 md:grid-cols-4 gap-4 p-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
         {/* District */}
         <div className="flex flex-col">
           <label className="mb-2 text-sm font-bold text-gray-700">
