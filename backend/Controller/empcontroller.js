@@ -2,6 +2,39 @@ import employeeModel from "../Model/usermodel.js";
 import cloudinary from "../Config/cloudinary.js";
 import usermodel from "../Model/usermodel.js";
 
+export const loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    //check email
+    if (!email || !password)
+      return res.status(400).json({
+        message: "Email and Password are required",
+      });
+    // find email in db
+    const employee = await usermodel.findOne(email);
+    if (!email || !password) {
+      return res.status(401).json({
+        message: "Email not found",
+      });
+    }
+    //compare password
+    if (employee.password !== password) {
+      return res.status(401).json({
+        message: "Password is incorrect",
+      });
+    }
+    // login successfully
+    res.status(200).json({
+      message: "Login Successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log("Login Failed", error);
+    res.status(500).json({
+      message: "server error",
+    });
+  }
+};
 const createEmployee = async (req, res) => {
   try {
     const {
@@ -44,15 +77,28 @@ const createEmployee = async (req, res) => {
     //checking email uniqueness
     let checkemailexist = await usermodel.findOne({ email });
     while (checkemailexist) {
-      const randomnumber = Math.floor(0 + randomnumber);
+      const randomnumber = Math.floor(Math.random() * 1000);
       make_email = `${firstname.toLowerCase()}+.${lastname.toLowerCase()}${randomnumber}@irc.gov.rw`;
       let checkemailexist = await usermodel.findOne({ email });
     }
+
+    let generalPassword = "Irc";
+    let password = generalPassword.toLowerCase();
+
+    let existingPassword = await usermodel.findOne({ password });
+
+    while (existingPassword) {
+      const randomNumber = Math.floor(100000 + Math.random() * 900000);
+      password = `${generalPassword.toLowerCase()}${randomNumber}`;
+      existingPassword = await usermodel.findOne({ password });
+    }
+    console.log(password);
     const employee = await employeeModel.create({
       empstatus: empstatus || "Active",
       firstname: firstname || "",
       lastname: lastname || "",
       email: email || "",
+      password: password || "",
       gender: gender || "Male",
       nid: nid ? Number(nid) : 0,
       phone: phone ? Number(phone) : 0,

@@ -42,7 +42,6 @@ const Login = () => {
           </div>
           <div className="flex w-4/5 items-center bg-white rounded-[2em] shadow-lg mb-10">
             <FaLock size={25} className="text-[#D89D1E] ml-5 flex-shrink-0" />
-
             <input
               type="password"
               placeholder="Password"

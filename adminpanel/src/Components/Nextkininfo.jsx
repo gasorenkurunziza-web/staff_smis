@@ -80,7 +80,7 @@ const Nextkininfo = ({ employee, setEmployee }) => {
             />
 
             <input
-              type="text"
+              type="number"
               placeholder="Enter Telephone"
               className="flex-1 w-full min-w-0 bg-transparent outline-none text-base md:text-lg text-gray-700"
               name="nextofkinphone"

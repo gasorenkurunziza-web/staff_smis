@@ -9,7 +9,20 @@ const App = () => {
   return (
     <div>
       <>
-        <Toaster position="top-center" richColors closeButton duration={5000} />
+        <Toaster
+          position="top-center"
+          richColors
+          closeButton
+          duration={5000}
+          toastOptions={{
+            style: {
+              fontSize: "30px",
+              padding: "10px",
+              border: "1px solid #a87400",
+              width: "500px",
+            },
+          }}
+        />
       </>
       <Routes>
         <Route path="/" element={<Login />} />

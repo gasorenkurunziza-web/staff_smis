@@ -11,6 +11,7 @@ import {
   FaCheck,
 } from "react-icons/fa";
 import { FcDepartment } from "react-icons/fc";
+import { UserX } from "lucide-react";
 
 const Jobinfo = ({ employee, setEmployee }) => {
   const getUnit = (jobTitle) => {
@@ -170,7 +171,7 @@ const Jobinfo = ({ employee, setEmployee }) => {
                 Employement Status
               </label>
               <div className="flex  flex-row items-center shadow-xl p-4 rounded-[1em]">
-                <FaCheck size={20} className="text-[#d89b17]" />
+                <UserX size={20} className="text-[#d89b17] " />
                 <select
                   className="flex-1 p-[12px] text-gray-700 font-medium outline-none"
                   name="empstatus"

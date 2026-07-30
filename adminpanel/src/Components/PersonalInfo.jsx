@@ -144,7 +144,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
                   className="text-[#D89D1E] ml-5 flex-shrink-0"
                 />
                 <input
-                  type="text"
+                  type="number"
                   name="nid"
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
@@ -164,7 +164,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
                   className="text-[#D89D1E] ml-5 flex-shrink-0"
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter your NID"
                   className="outline-none py-6 px-3 text-xl"
                   value={employee.phone}
