@@ -26,6 +26,8 @@
     "nextofkinrelation",
     "pswd",
     "randomnumber",
+    "setemail",
+    "setpassword",
     "setpreview",
     "usermodel"
   ]

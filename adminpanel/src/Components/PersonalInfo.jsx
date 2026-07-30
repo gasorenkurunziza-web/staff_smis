@@ -48,7 +48,7 @@ const PersonalInfo = ({ employee, setEmployee }) => {
         <div className="">
           <label
             htmlFor="photo"
-            className="cursor-pointer h-[260px] w-[220px] border-2 border-dashed border-yellow-300 flex flex-col items-center justify-center overflow-hidden"
+            className="cursor-pointer h-[260px] rounded-[1em] w-[220px] border-2 border-dashed border-yellow-300 flex flex-col items-center justify-center overflow-hidden"
           >
             {preview ? (
               <img

@@ -13,9 +13,13 @@ import {
   House,
 } from "lucide-react";
 import { adminContext } from "../../Context/adminContext";
+import { useState } from "react";
 
 const Login = () => {
+  const [email, setemail] = useState("israel");
+  const [password, setpassword] = useState("gas");
   const { navigation } = useContext(adminContext);
+
   return (
     <div className="h-screen flex">
       {/*left side*/}
@@ -37,6 +41,8 @@ const Login = () => {
             <input
               type="text"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setemail(e.target.value)}
               className="outline-none py-6 px-3 text-2xl"
             />
           </div>
@@ -44,6 +50,8 @@ const Login = () => {
             <FaLock size={25} className="text-[#D89D1E] ml-5 flex-shrink-0" />
             <input
               type="password"
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
               placeholder="Password"
               className="outline-none py-6 px-3 text-2xl"
             />

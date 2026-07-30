@@ -11,7 +11,7 @@ export const loginAdmin = async (req, res) => {
         message: "Email and Password are required",
       });
     // find email in db
-    const employee = await usermodel.findOne(email);
+    const employee = await usermodel.findOne({ email });
     if (!email || !password) {
       return res.status(401).json({
         message: "Email not found",
@@ -92,7 +92,7 @@ const createEmployee = async (req, res) => {
       password = `${generalPassword.toLowerCase()}${randomNumber}`;
       existingPassword = await usermodel.findOne({ password });
     }
-    console.log(password);
+
     const employee = await employeeModel.create({
       empstatus: empstatus || "Active",
       firstname: firstname || "",
@@ -117,7 +117,7 @@ const createEmployee = async (req, res) => {
       nextofkinrelation: nextofkinrelation || "",
       photo: result.secure_url,
     });
-
+    console.log(employee);
     return res.status(201).json({
       success: true,
       message: "Employee created successfully",
