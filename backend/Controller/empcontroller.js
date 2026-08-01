@@ -78,7 +78,7 @@ const createEmployee = async (req, res) => {
     let checkemailexist = await usermodel.findOne({ email });
     while (checkemailexist) {
       const randomnumber = Math.floor(Math.random() * 1000);
-      make_email = `${firstname.toLowerCase()}+.${lastname.toLowerCase()}${randomnumber}@irc.gov.rw`;
+      make_email = `${firstname.toLowerCase()}.${lastname.toLowerCase()}${randomnumber}@irc.gov.rw`;
       let checkemailexist = await usermodel.findOne({ email });
     }
 
