@@ -5,6 +5,7 @@ import { GoPlus } from "react-icons/go";
 import { employees } from "../assets/assets";
 import { CiMail } from "react-icons/ci";
 import { FaPhoneAlt } from "react-icons/fa";
+import { IoMdMail } from "react-icons/io";
 
 const MiddleComponents = () => {
   return (
@@ -61,11 +62,11 @@ const MiddleComponents = () => {
             </button>
           </div>
           {/* table section for employees */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {employees.map((employee) => (
               <div
                 key={employee.id}
-                className=" relative bg-white p-4 border border-yellow-500 rounded-xl shadow-lg flex flex-col text-center items-center gap-2"
+                className=" relative bg-white p-4 border border-yellow-500 rounded-xl shadow-lg flex flex-col text-center items-center gap-2 overflow-hidden"
               >
                 <div className="absolute top-2 right-2 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-green-500"></span>
@@ -88,17 +89,19 @@ const MiddleComponents = () => {
 
                 <p className="text-sm text-gray-400">{employee.jobtitle}</p>
                 <div className="mt-2 bg-yellow-100">
-                  <p className="text-sm text-yellow-800">{employee.unit}</p>
+                  <p className="text-sm text-yellow-700">{employee.unit}</p>
                 </div>
                 <div className="w-full pt-4 space-y-2 text-left border-t border-gray-200">
                   <div className="flex items-center gap-2">
-                    <CiMail className="inline-block mr-2 text-gray-500" />
+                    <div>
+                      <IoMdMail className="text-gray-500" />
+                    </div>
                     <span className="text-sm text-gray-600">
                       {employee.email}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FaPhoneAlt className="inline-block mr-2 text-gray-500 " />
+                    <FaPhoneAlt className=" text-gray-500 " />
                     <span className="text-sm text-gray-600">
                       {employee.phone}
                     </span>
