@@ -131,7 +131,7 @@ function Personinfo({ label, value }) {
     </div>
   );
 }
-function Title({ icon, title, children }) {
+export function Title({ icon, title, children }) {
   return (
     <div className="mt-6">
       <div className="text-yellow-500 text-xs flex items-center gap-2 pl-3">
